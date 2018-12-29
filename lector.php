@@ -14,6 +14,8 @@
 <div class="large-12 columns" style="font-family: Michroma;">
   <?php
   $directorio = opendir("../"); //ruta actual
+  $dirs = array();
+  $files = array();
   while ($archivo = readdir($directorio)){
       /*
       Obtenemos un archivo y luego otro sucesivamente
@@ -21,22 +23,29 @@
       de ser un directorio lo envolvemos entre corchetes
       en este caso de ser necesario la omitimos
       */
-      if(is_dir($archivo) === true){
-            echo '<a target="_blank" href="../'.$archivo.'">['.$archivo.']</a><br />';
+
+      if(is_dir($archivo) == true){
+        array_push ( $dirs , $archivo );
       }else{
-        if(!is_file($archivo)){
-          echo '<a target="_blank" href="../'.$archivo.'">['.$archivo.']</a><br />';
+        $pos = strpos($archivo, '.');
+        $largo = strlen($archivo);
+        if ($pos == true && $largo >= 2){
+          array_push ( $files , $archivo );
         }else{
-          $pos = strpos($archivo, '.');
-          $largo = strlen($archivo);
-          if ($pos == true && $largo >= 3){
-              echo '<a target="_blank" href="../'.$archivo.'">'.$archivo.'</a><br />';
-          }else{
-              echo '<a target="_blank" href="../'.$archivo.'">['.$archivo.']</a><br />';
-          }
+          array_push ( $dirs , $archivo );
         }
       }
+
   }
+  //sort($dirs);
+  //sort($files);
+  foreach ($dirs as $dir) {
+        echo '[dir] => <a style="font-weight: bold"target="_blank" href="../'.$dir.'">['.$dir.']</a><br />';
+  }
+  foreach ($files as $file) {
+        echo '[file] => <a style="color: red" target="_blank" href="../'.$file.'">'.$file.'</a><br />';
+  }
+
 ?>
 </div>
 </body>
